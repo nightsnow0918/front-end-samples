@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.26/vue.min.js"></script>
+    <link rel="stylesheet" href="calculator.css"/>
+    <title></title>
+</head>
+<body>
+    <div id="calculator">
+        <div id="display">
+            <input type="text" v-model="displayResult" />
+        </div>
+        <div id="panel">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="btn" @click="pressButton(7)">7</td>
+                        <td class="btn" @click="pressButton(8)">8</td>
+                        <td class="btn" @click="pressButton(9)">9</td>
+                        <td class="btn operator" @click="pressOperator('plus')">+</td>
+                        <td class="btn" @click="backSpace()">←</td>
+                    </tr>
+                    <tr>
+                        <td class="btn" @click="pressButton(4)">4</td>
+                        <td class="btn" @click="pressButton(5)">5</td>
+                        <td class="btn" @click="pressButton(6)">6</td>
+                        <td class="btn operator" @click="pressOperator('minus')">-</td>
+                        <td class="btn" @click="clearInput()">C</td>
+                    </tr>
+                    <tr>
+                        <td class="btn" @click="pressButton(1)">1</td>
+                        <td class="btn" @click="pressButton(2)">2</td>
+                        <td class="btn" @click="pressButton(3)">3</td>
+                        <td class="btn operator" @click="pressOperator('times')">×</td>
+                        <td rowspan="2" class="btn operator" @click="pressOperator('calcu')">=</td>
+                    </tr>
+                    <tr>
+                        <td class="btn" @click="pressButton('plusmn')">&plusmn;</td>
+                        <td class="btn" @click="pressButton(0)">0</td>
+                        <td class="btn" @click="pressButton('.')">.</td>
+                        <td class="btn operator" @click="pressOperator('divide')">&divide;</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div> <!-- #calculator -->
+    <script src="calculator.js"></script>
+</body>
+</html>

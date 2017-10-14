@@ -1,0 +1,60 @@
+.nav-item {
+    width: 100%;
+}
+
+.test-description {
+    height: 200px;
+    margin-bottom: 30px;
+}
+
+.test-content {
+    padding-top: 20px;
+}
+
+.item {
+    background: yellow;
+    width: 100px;
+    margin-top: 20px;
+}
+
+.item-move {
+    transition: transform .5s cubic-bezier(.55,0,.1,1);
+}
+
+
+#square-panel {
+    position: relative;
+}
+
+
+.square {
+    width: 100px;
+    height: 100px;
+    background: lightblue;
+    margin: 5px 5px 5px 5px;
+    font-size: 36px;
+    display: inline-flex;
+    text-align: center;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.square-container {
+    width: 560px;
+    border: 1px solid lightgray;
+}
+
+.square-move {
+    transition: transform .5s ease;
+}
+
+
+#the-matrix-2 {
+    width: 500px;
+}
+
+
+.operations {
+    margin-top: 15px;
+}
+

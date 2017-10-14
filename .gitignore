@@ -1,0 +1,4 @@
+untracked/
+.sass-cache/
+*.css.map
+*.swp

@@ -1,0 +1,57 @@
+$block-width: 100px;
+$block-height: 100px;
+$block-border-width: 3px;
+$game-panel-border-width: 5px;
+
+#game-panel {
+    width: $block-width*4 + $block-border-width*6;
+    height: $block-height*4 + $block-border-width*6;
+    border: $game-panel-border-width solid lightblue;
+    background: #555555;
+    position: relative;
+}
+
+#game-status {
+    margin-top: 10px;
+}
+
+.game-block {
+    width: $block-width;
+    height: $block-height;
+    border: $block-border-width solid lightblue;
+    background: lightyellow;
+    font-size: 40px;
+    display: flex;
+    position: absolute;
+    text-align: center;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.move-transition {
+    width: 100px;
+    height: 100px;
+    background: lightyellow;
+    font-size: 40px;
+    display: flex;
+    position: absolute;
+    text-align: center;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.move-enter {
+    
+}
+
+.move-leave {
+    
+}
+
+.add-transition {
+    transition: all 0.3 ease;
+}
+
+.add-enter {
+    opacity: 0;
+}

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css" integrity="sha384-MIwDKRSSImVFAZCVLtU0LMDdON6KVCrZHyVQQj6e8wIEJkW4tvwqXrbMIya1vriY" crossorigin="anonymous">
+    <link rel="stylesheet" href="animated-list.css">
+    <script src="https://cdn.jsdelivr.net/lodash/4.15.0/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.26/vue.min.js"></script>
+    <script src="vue-animated-list.js"></script>
+    <title></title>
+</head>
+<body>
+    <!--
+
+    [Description] This is a test on vue-animated-list.js. I made several examples
+    for testing what kind of data modification operations can the animation effect 
+    be invoked.
+
+    [2016.08.25] 
+    - The animation seems not to be invoked when doing matrix shuffling.
+
+    [2016.08.22]
+    - Shift/Shuffle/Swap on one-dimension array is available.
+    - The animation seems not to be invoked when I replace the list with a new one.
+      Therefore, we can not expect that the animation can affect when we simply
+      using the method .reverse() (It will generate a new array)
+
+    -->
+
+    <div id="block-move-animation" class="container-fluid">
+        <div class="row">
+            <div class="col-md-2">
+                <ul class="nav nav-pills" role="pilllist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="pill" href="#basic-animation" role="pill">Basic Animation</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="pill" href="#basic-animation-2" role="pill">Basic Animation 2</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="pill" href="#matrix-test" role="pill">Matrix Test</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="pill" href="#matrix-test-2" role="pill">Matrix Test 2</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="pill" href="#matrix-test-3" role="pill">Matrix Test 3</a>
+                    </li>
+                </ul> 
+            </div>
+            <div class="col-md-9">
+                <div class="tab-content">
+                    <div class="tab-pane fade in active" id="basic-animation" role="tabpanel">
+                        <!-- Basic animations -->
+                        <div id="square-panel" class="test-content">
+                            <div class="test-description">
+                                <h1>Basic Animations</h1>
+                                <p>[Brief] Here we define an array with values [0,1,2,3]. The square will not be displayed if it has
+                                value 0.
+                                </p>
+                            </div>
+                            <div v-for="square in squares"
+                             class="square" :style="squareStyle[$index]"
+                             transition="square"
+                             >
+                             {{ square.value }}
+                            </div>
+                            <div class="operations">
+                                <button class="btn btn-sm btn-secondary" type="button" @click="shiftLeft()">Shift Left</button>
+                                <button class="btn btn-sm btn-secondary" type="button" @click="shiftRight()">Shift Right</button>
+                                <button class="btn btn-sm btn-secondary" type="button" @click="shuffle()">Shuffle</button>
+                                <button class="btn btn-sm btn-secondary" type="button" @click="addNew()">Add New</button>
+                                <button class="btn btn-sm btn-secondary" type="button" @click="removeLast()">Remove Last</button>
+                                <br>
+                                <button class="btn btn-sm btn-secondary" type="button" @click="swap()">Swap</button>
+                                <select v-model="select01" id="select01" name="items">
+                                    <option v-for="square in squares" 
+                                            :value="$index">{{$index}}</option>
+                                </select>
+                                <select v-model="select02" id="select02" name="items">
+                                    <option v-for="square in squares" 
+                                            :value="$index">{{$index}}</option>
+                                </select>
+                            </div>
+                            <!--
+                            <square 
+                             v-for="square in squares" :value="square.value"
+                             :style=squareStyle[$index] transition="square" 
+                             >
+                            </square>
+                            -->
+                        </div>
+                        <hr>
+                    </div> <!-- div.tab-pane -->
+
+                    <div class="tab-pane fade" id="basic-animation-2" role="tabpanel">
+                        <!-- Basic Animations 2 -->
+                        <div id="square-panel-2" class="test-content">
+                            <div class="test-description">
+                                <h1>Basic Animations 2</h1>
+                                <p>[Brief] Here we define an array with values [0,2,0,3,0]. The square will not be displayed if it has
+                                value 0. The panel width is five squares long.
+                                </p>
+                            </div>
+                            <div class="test-body">
+                                <div class="square-container">
+                                    <div v-for="square in squares2"
+                                     class="square" :style="squareStyle2[$index]"
+                                     transition="square"
+                                     >
+                                     {{ square.value }}
+                                    </div>
+                                </div>
+                                <div class="operations">
+                                    <button class="btn btn-sm btn-secondary" type="button" @click="move2left()">Move all to the left</button>
+                                    <button class="btn btn-sm btn-secondary" type="button" @click="move2right()">Move all to the right</button>
+                                </div>
+                            </div>
+                            <!--
+                            <square 
+                             v-for="square in squares" :value="square.value"
+                             :style=squareStyle[$index] transition="square" 
+                             >
+                            </square>
+                            -->
+                        </div>
+                        <hr>
+                    </div> <!-- div.tab-pane -->
+
+                    <div class="tab-pane fade" id="matrix-test" role="tabpanel">
+                        <div id="the-matrix" class="test-content">
+                            <div class="test-description">
+                                <h1>Matrix Test</h1>
+                                <p>
+                                    [Brief] Create a 2-dim matrix and operating on its elements to see if
+                                    the animation can be invoked<br>
+                                    - Animation on shifting within one row <em>CAN</em> work.<br>
+                                    - Animation on shifting the whole row up and down <em>CAN</em> work.<br>
+                                    - Animation on shuffling <em>CANNOT</em> work.
+                                </p>
+                            </div>
+                            <div class="test-body">
+                                <div v-for="row in matrix" transition="square">
+                                    <div v-for="e in matrix[$index]" class="square" transition="square">
+                                        {{ e }}
+                                    </div>
+                                    <button input="button" class="btn btn-secondary"
+                                            @click="matrix_shift($index)">Shift</button>
+                                </div>
+                                <div class="operations">
+                                    <button input="button" class="btn btn-primary"
+                                            @click="matrix_shuffle">Shuffle</button>
+                                    <button input="button" class="btn btn-primary"
+                                            @click="matrix_row_shift">Row Shift (Down)</button>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    </div> <!-- div.tab-pane -->
+
+                    <div class="tab-pane fade" id="matrix-test-2" role="tabpanel">
+                        <div id="the-matrix-2" class="test-content">
+                            <div class="test-description">
+                                <h1>Matrix Test 2 (Fake matrix)</h1>
+                                <p>
+                                [Brief] Same as test 1, except that we use an array to store the data and adjust the view to let it display like a matrix<br>
+                                <br>
+                                - Animation is invoked at this case<br>
+                                - Have to think how to operate row shifting in this case
+                                </p>
+                            </div>
+                            <div class="test-body">
+                                <div v-for="e in matrix2" class="square" transition="square">
+                                    {{ e }}
+                                </div>
+                                <div class="operations">
+                                    <button input="button" class="btn btn-primary"
+                                            @click="matrix2_shuffle">Shuffle</button>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    </div> <!-- div.tab-pane -->
+
+                    <div class="tab-pane fade" id="matrix-test-3" role="tabpanel">
+                        <div id="the-matrix-3" class="test-content">
+                            <div class="test-description">
+                                <h1>Matrix Test 3</h1>
+                                <p>
+                                [Brief] Create a 2-D matrix with some initial values. See if the "move to left" operation
+                                can invoke animation.
+                                </p>
+                            </div>
+                            <div class="test-body">
+                                <div v-for="rows in matrix">
+                                    <div v-for="e in rows" class="square"
+                                     :style="squareStyle[$parent.$index][$index]"
+                                     :transition="square">
+                                        {{ e }}
+                                    </div>
+                                </div>
+                                <div class="operations">
+                                    <button type="button" class="btn btn-sm btn-secondary"
+                                     @click="move2left_2">Move to Left</button>
+                                    <button type="button" class="btn btn-sm btn-secondary"
+                                     @click="transpose">Transpose</button>
+                                    <button type="button" class="btn btn-sm btn-primary"
+                                     @click="reset">Reset</button>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    </div> <!-- div.tab-pane -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/js/bootstrap.min.js" integrity="sha384-ux8v3A6CPtOTqOzMKiuo3d/DomGaaClxFYdCu2HPMBEkf6x2xiDyJ7gkXU0MWwaD" crossorigin="anonymous"></script>
+    <script src="animated-list.js"></script>
+</body>
+</html>

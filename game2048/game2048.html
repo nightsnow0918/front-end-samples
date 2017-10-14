@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/lodash/4.15.0/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.26/vue.min.js"></script>
+    <script src="vue-animated-list.js"></script>
+    <link rel="stylesheet" href="game2048.css">
+    <title></title>
+</head>
+<body>
+    <div id="game2048">
+        <div id="game-panel">
+            <game-block 
+             v-for="index, block in blocks" 
+             :index="$index" 
+             :value="blocks[$index]" 
+             track-by="$index"></game-block>
+        </div>
+        <div id="game-status">
+            <div id="game-score"> Score: {{score}} </div>
+            <div id="congrat"> {{status}} </div>
+        </div>
+    </div>
+    <script src="game2048.js"></script>
+</body>
+</html>
